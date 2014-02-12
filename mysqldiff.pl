@@ -34,8 +34,8 @@ sub main
 
 	foreach my $conf (@confs)
 	{
-		my @locations = split /_/, $conf;
-		my $location = $locations[1];
+		my @sites = split /_/, $conf;
+		my $site = $sites[1];
 	
 		open my $F1, '<', $data . '/' . $conf or die $!;
 
@@ -69,7 +69,7 @@ sub main
 		}
 		$sth->finish;
 
-		open my $F2, '>', $data . '/table_list_' . $location or die $!;
+		open my $F2, '>', $data . '/table_list_' . $site or die $!;
 		foreach my $table (@tables)
 		{
 			print $F2 $table . "\n";
@@ -88,7 +88,7 @@ sub main
 
 			if (my $row = $sth->fetchrow_hashref)
 			{
-				open my $F3, '>', $data . '/create_table_' . $table . '_' . $location or die $!;
+				open my $F3, '>', $data . '/create_table_' . $table . '_' . $site or die $!;
 				print $F3 $row->{'Create Table'};
 				close $F3;
 			}
