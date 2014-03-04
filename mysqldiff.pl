@@ -6,7 +6,7 @@ use warnings;
 # For Debug
 #use Data::Dumper;
 
-my $data = './data/';
+my $data = './mysqldiff/';
 my $diff = '/usr/bin/diff';
 
 use DBI;
@@ -34,14 +34,20 @@ sub main
 
 	foreach my $conf (@confs)
 	{
-		my @sites = split /_/, $conf;
-		my $site = $sites[1];
+		my @target_splited = split /_/, $conf;
+		my $target = $target_splited[1];
+
+		if (2 < scalar @target_splited)
+		{
+			print "conf_FILE must be like conf_ORIGINAL or conf_TARGET0X\n";
+			return;
+		}
 	
-		open my $F1, '<', $data . '/' . $conf or die $!;
+		open my $CONF, '<', $data . '/' . $conf or die $!;
 
 		my $file = '';
-		while (0 != (my $n = read $F1, my $tmp, 1024)) { $file .= $tmp; }
-		close $F1;
+		while (0 != (my $n = read $CONF, my $tmp, 1024)) { $file .= $tmp; }
+		close $CONF;
 
 		$file =~ s/\\r//g;
 		my @lines = split /\n/, $file;
@@ -52,11 +58,11 @@ sub main
 		my $uid  = $lines[3];
 		my $pwd  = $lines[4];
 
-		if ($db ne $DB_NAME)
-		{
-			print "db_name and db_name in $conf are different\n";
-			return;
-		};
+		#if ($db ne $DB_NAME)
+		#{
+			#print "db_name and db_name in $conf are different\n";
+			#return;
+		#};
 
 		my $dbh = DBI->connect('DBI:mysql:' . $db . ':' . $host . ':' . $port, $uid, $pwd) or die $!;
 		my $sth = $dbh->prepare('show tables');
@@ -69,12 +75,12 @@ sub main
 		}
 		$sth->finish;
 
-		open my $F2, '>', $data . '/table_list_' . $site or die $!;
+		open my $TABLE_LIST, '>', $data . '/table_list_' . $target or die $!;
 		foreach my $table (@tables)
 		{
-			print $F2 $table . "\n";
+			print $TABLE_LIST $table . "\n";
 		}
-		close $F2;
+		close $TABLE_LIST;
 
 		foreach my $table (@tables)
 		{
@@ -88,9 +94,9 @@ sub main
 
 			if (my $row = $sth->fetchrow_hashref)
 			{
-				open my $F3, '>', $data . '/create_table_' . $table . '_' . $site or die $!;
-				print $F3 $row->{'Create Table'};
-				close $F3;
+				open my $CREATE_TABLE, '>', $data . '/create_table_' . $table . '_' . $target or die $!;
+				print $CREATE_TABLE $row->{'Create Table'};
+				close $CREATE_TABLE;
 			}
 			$sth->finish;
 		}
@@ -98,29 +104,41 @@ sub main
 		$dbh->disconnect;
 	}
 
-	# Diff Table List
-	my $command_diff_table_list = "$diff $data/table_list_LOCAL $data/table_list_REMOTE";
-	my $result_diff_table_list = `$command_diff_table_list`;
-
-	print "====\n";
-	print $command_diff_table_list . "\n";
-	print $result_diff_table_list . "\n";
-
-	#unlink $data . '/table_list_LOCAL';
-	#unlink $data . '/table_list_REMOTE';
-
-	# Diff Create Table
-	foreach my $table (@tables)
+	foreach my $conf (@confs)
 	{
-		my $command_diff_create_table = $diff . ' ' . $data . '/create_table_' . $table . '_LOCAL ' . $data . '/create_table_' . $table . '_REMOTE';
-		my $result_diff_create_table = `$command_diff_create_table`;
+		if ('conf_ORIGINAL' eq $conf)
+		{
+			next;
+		}
 
+		my @target_splited = split /_/, $conf;
+		my $target = $target_splited[1];
+
+		# Diff Table List
+		my $diff_table_list = "$diff $data/table_list_ORIGINAL $data/table_list_$target";
+
+		print "\n";
 		print "====\n";
-		print $command_diff_create_table . "\n";
-		print $result_diff_create_table . "\n";
+		print $diff_table_list . "\n";
+		print `$diff_table_list`;
 
-		#unlink $data . '/create_table_' . $table . '_LOCAL';
-		#unlink $data . '/create_table_' . $table . '_REMOTE';
+		#unlink $data . '/table_list_ORIGINAL';
+		#unlink $data . '/table_list_' . $target';
+
+		# Diff Create Table
+		foreach my $table (@tables)
+		{
+			my $diff_create_table = $diff . ' ' . $data . '/create_table_' . $table . '_ORIGINAL ' . $data . '/create_table_' . $table . '_' . $target;
+
+			print "====\n";
+			print $diff_create_table . "\n";
+			print `$diff_create_table`;
+
+			#unlink $data . '/create_table_' . $table . '_ORIGINAL';
+			#unlink $data . '/create_table_' . $table . '_' . $target;
+		}
+
+		print "\n";
 	}
 }
 
@@ -147,4 +165,5 @@ sub read_dir_and_filter
 
         return sort @filtered;
 }
+
 
