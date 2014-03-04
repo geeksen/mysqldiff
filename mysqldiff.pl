@@ -6,7 +6,7 @@ use warnings;
 # For Debug
 #use Data::Dumper;
 
-my $data = './mysqldiff/';
+my $data = './data/';
 my $diff = '/usr/bin/diff';
 
 use DBI;
