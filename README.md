@@ -8,15 +8,16 @@ Install Perl DBI/DBD Modules
 
 Create Data Directory
 ---------------------
-* mkdir -p ./data/db_name
+* mkdir -p data/db_name
 
 Configuration
 -------------
-* vi ./data/db_name/conf_ORIGINAL
-* vi ./data/db_name/conf_TARGET00
-* vi ./data/db_name/conf_TARGET01
+* vi data/db_name/conf_ORIGINAL
+* vi data/db_name/conf_TARGET00
+* vi data/db_name/conf_TARGET01
 
 Run
 ---
+* chmod +x mysqldiff.pl
 * ./mysqldiff.pl db_name
 
