@@ -2,7 +2,7 @@
 
 # //////
 # --@-@
-#     >  Geeksen's Lab
+#     >  Geeksen's Lab.
 # ____/  http://www.geeksen.com/
 #
 # Copyright (c) 2014 Terry Geeksen
