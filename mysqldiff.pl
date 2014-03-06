@@ -3,7 +3,7 @@
 # //////
 # --@-@
 #     >  Geeksen's Lab
-# ____/  http://github.com/geeksen/
+# ____/  http://www.geeksen.com/
 #
 # Copyright (c) 2014 Terry Geeksen
 #
