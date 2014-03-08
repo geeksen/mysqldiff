@@ -6,9 +6,10 @@ Install Perl DBI/DBD Modules
 * sudo apt-get install libdbi-perl
 * sudo apt-get install libdbd-mysql-perl
 
-Create Data Directory
----------------------
-* mkdir -p data/db_name
+Install mysqldiff
+-----------------
+* git clone https://github.com/geeksen/mysqldiff.git
+* cd mysqldiff
 
 Configuration
 -------------
