@@ -17,8 +17,11 @@ Configuration
 * vi data/db_name/conf_TARGET00
 * vi data/db_name/conf_TARGET01
 
+Chmod
+-----
+* chmod +x mysqldiff.pl
+
 Run
 ---
-* chmod +x mysqldiff.pl
 * ./mysqldiff.pl db_name
 
