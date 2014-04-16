@@ -44,9 +44,7 @@ sub main
 		print "Usage: ./mysqldiff.pl db_name\n";
 		return;
 	}
-	my $DB_NAME = $ARGV[0];
-
-	$data .= $DB_NAME;
+	$data .= $ARGV[0];
 
 	my @tables;
 	my @confs = &read_dir_and_filter($data, 'conf');
@@ -83,12 +81,6 @@ sub main
 		my $uid  = $lines[3];
 		my $pwd  = $lines[4];
 
-		#if ($db ne $DB_NAME)
-		#{
-			#print "db_name and db_name in $conf are different\n";
-			#return;
-		#};
-
 		my $dbh = DBI->connect('DBI:mysql:' . $db . ':' . $host . ':' . $port, $uid, $pwd) or die $!;
 		my $sth = $dbh->prepare('show tables');
 		$sth->execute;
@@ -96,7 +88,7 @@ sub main
 		@tables = ();
 		while (my $row = $sth->fetchrow_hashref)
 		{
-			push @tables, $row->{'Tables_in_' . $DB_NAME};
+			push @tables, $row->{'Tables_in_' . $db};
 		}
 		$sth->finish;
 
