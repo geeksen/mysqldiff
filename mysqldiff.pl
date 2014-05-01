@@ -112,7 +112,7 @@ sub main
 			if (my $row = $sth->fetchrow_hashref)
 			{
 				open my $CREATE_TABLE, '>', $data . '/create_table_' . $table . '_' . $target or die $!;
-				print $CREATE_TABLE $row->{'Create Table'};
+				print $CREATE_TABLE $row->{'Create Table'} . "\n";
 				close $CREATE_TABLE;
 			}
 			$sth->finish;
