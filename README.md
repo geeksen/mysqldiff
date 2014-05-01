@@ -3,6 +3,8 @@ mysqldiff
 
 Install Perl DBI/DBD Modules
 ----------------------------
+* sudo apt-get update
+* sudo apt-get upgrade
 * sudo apt-get install libdbi-perl
 * sudo apt-get install libdbd-mysql-perl
 
