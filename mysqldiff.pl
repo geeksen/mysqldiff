@@ -47,7 +47,7 @@ sub main
 	$data .= $ARGV[0];
 
 	my @tables;
-	my @confs = &read_dir_and_filter($data, 'conf');
+	my @confs = &read_dir_and_find($data, 'conf');
 
 	if (0 == scalar @confs)
 	{
@@ -159,10 +159,10 @@ sub main
 	}
 }
 
-sub read_dir_and_filter
+sub read_dir_and_find
 {
         my $path = $_[0];
-        my $filter = $_[1];
+        my $keyword = $_[1];
 
 	if (! -d $path)
 	{
@@ -173,14 +173,14 @@ sub read_dir_and_filter
         my @files = readdir $D;
         closedir $D;
 
-        my @filtered = ();
+        my @found = ();
         foreach my $file (@files)
         {
                 if ($file =~ /^\./) { next; }
-                if ($file =~ /$filter/) { push @filtered, $file; }
+                if ($file =~ /$keyword/) { push @found, $file; }
         }
 
-        return sort @filtered;
+        return sort @found;
 }
 
 
