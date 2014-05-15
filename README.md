@@ -21,7 +21,7 @@ Configuration
 
 Chmod
 -----
-* chmod +x mysqldiff.pl
+* chmod 705 mysqldiff.pl
 
 Run
 ---
