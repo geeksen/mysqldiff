@@ -27,6 +27,7 @@
 
 use strict;
 use warnings;
+no warnings 'uninitialized';
 
 # For Debug
 #use Data::Dumper;
@@ -135,24 +136,16 @@ sub main
 		my $diff_table_list = "$diff $data/table_list_ORIGINAL $data/table_list_$target";
 
 		print "\n";
-		print "====\n";
 		print $diff_table_list . "\n";
-		print `$diff_table_list`;
-
-		#unlink $data . '/table_list_ORIGINAL';
-		#unlink $data . '/table_list_' . $target';
+		print `$diff_table_list` . "\n";
 
 		# Diff Create Table
 		foreach my $table (@tables)
 		{
 			my $diff_create_table = $diff . ' ' . $data . '/create_table_' . $table . '_ORIGINAL ' . $data . '/create_table_' . $table . '_' . $target;
 
-			print "====\n";
 			print $diff_create_table . "\n";
-			print `$diff_create_table`;
-
-			#unlink $data . '/create_table_' . $table . '_ORIGINAL';
-			#unlink $data . '/create_table_' . $table . '_' . $target;
+			print `$diff_create_table` . "\n";
 		}
 
 		print "\n";
@@ -182,5 +175,4 @@ sub read_dir_and_find
 
         return sort @found;
 }
-
 
